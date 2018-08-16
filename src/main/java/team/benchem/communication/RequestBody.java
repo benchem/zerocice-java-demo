@@ -1,5 +1,8 @@
 package team.benchem.communication;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * @ClassName RequestBody
  * @Deseription TODO
@@ -9,6 +12,22 @@ package team.benchem.communication;
  **/
 public class RequestBody {
 
+    @JSONField(name="handler")
+    String handlerName;
 
+    @JSONField(name="message")
+    JSONObject messageBody;
 
+    public RequestBody(String handlerName, JSONObject messageBody) {
+        this.handlerName = handlerName;
+        this.messageBody = messageBody;
+    }
+
+    public String getHandlerName() {
+        return handlerName;
+    }
+
+    public JSONObject getMessageBody() {
+        return messageBody;
+    }
 }

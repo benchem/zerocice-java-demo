@@ -2,6 +2,7 @@ package team.benchem.communication.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.zeroc.Ice.Current;
+import org.springframework.stereotype.Service;
 import team.benchem.communication.JsonServiceCenter;
 import team.benchem.communication.JsonServicePortalPrx;
 import team.benchem.communication.ResponseBody;
@@ -19,6 +20,7 @@ import java.util.Map;
  * @Date 2018-08-16 9:43
  * @Version 1.0
  **/
+@Service
 public class JsonServiceCenterImpl implements JsonServiceCenter {
 
     final static int TIMEOUT_SECOND = 30;
