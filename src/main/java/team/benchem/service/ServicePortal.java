@@ -16,6 +16,6 @@ public interface ServicePortal {
     void unRegisterHandler(String handlerKey);
 
     interface MessageHandler{
-        JSONObject onMessageReceivce(JSONObject messageBody);
+        JSONObject onMessageReceive(JSONObject messageBody);
     }
 }

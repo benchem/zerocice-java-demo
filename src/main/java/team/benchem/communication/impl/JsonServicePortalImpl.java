@@ -48,7 +48,7 @@ public class JsonServicePortalImpl implements JsonServicePortal, ServicePortal {
 
         try{
             JSONObject resBody = messageHandlers.get(request.getHandlerName())
-                    .onMessageReceivce(request.getMessageBody());
+                    .onMessageReceive(request.getMessageBody());
             ResponseBody response = new ResponseBody(resBody);
             return JSON.toJSONString(response);
         }catch (Exception ex){
