@@ -1,0 +1,40 @@
+group 'team.benchem'
+version buildVersion
+
+buildscript {
+    repositories{
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.zeroc.gradle.ice-builder:slice:1.4.5"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'slice'
+
+sourceCompatibility = jdkVersion
+
+slice {
+    java {
+        srcDir = 'src/main/slice'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.zeroc:ice:3.7.1'
+    compile("com.alibaba:fastjson:$fastjsonVersion")
+
+    testCompile group: 'junit', name: 'junit', version: junitVersion
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
