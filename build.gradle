@@ -36,8 +36,7 @@ dependencies {
     compile("com.zeroc:ice:$iceVersion")
     compile("com.alibaba:fastjson:$fastjsonVersion")
     compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
-
-    testCompile group: 'junit', name: 'junit', version: junitVersion
+    testCompile("junit:junit:$junitVersion")
 }
 
 tasks.withType(JavaCompile) {

@@ -1,4 +1,5 @@
 #pragma once
+#include <Ice/Identity.ice>
 
 module team
 {
@@ -13,9 +14,9 @@ module team
 
             interface JsonServiceCenter
             {
-                void register(string clientTag, JsonServicePortal* callBack);
+                void register(string clientTag, Ice::Identity ident);
 
-                void unRegister(string clientTag);
+                void unRegister(string clientTag, Ice::Identity ident);
 
                 void cast(string requestBody);
 

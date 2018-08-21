@@ -1,8 +1,6 @@
 package team.benchem.communication;
 
-import com.zeroc.Ice.Communicator;
-import com.zeroc.Ice.ObjectAdapter;
-import com.zeroc.Ice.Util;
+import com.zeroc.Ice.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +8,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
+
+import java.lang.Exception;
 
 /**
  * @ClassName IceRunner
@@ -31,13 +31,25 @@ public class IceRunner implements ApplicationRunner, Ordered {
     public void run(ApplicationArguments args) throws Exception {
         logger.info("ice init");
 
-        communicator = Util.initialize(args.getSourceArgs());
-        Runtime.getRuntime().addShutdownHook(new IceShutdownHook(communicator));
-        ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints("LonntecRPC", "default -h 0.0.0.0 -p 9090");
-        adapter.add(serviceCenter, Util.stringToIdentity("LonntecRPC"));
-        adapter.activate();
-        logger.info("ice running");
+        Properties props = Util.createProperties();
+        props.setProperty("Ice.ThreadPool.Server.Size", "256");
+        props.setProperty("Ice.ThreadPool.Server.SizeMax", "1000");
+        props.setProperty("Ice.ThreadPool.Server.SizeWarn", "900");
+        props.setProperty("Ice.ThreadPool.Client.Size", "20");
+        props.setProperty("Ice.ThreadPool.Client.SizeMax", "100");
+        props.setProperty("Ice.ThreadPool.Client.SizeWarn", "80");
+        props.setProperty("Ice.MessageSizeMax", "5242880");
 
+        InitializationData initData = new InitializationData();
+        initData.properties = props;
+        communicator = Util.initialize(initData);
+        Runtime.getRuntime().addShutdownHook(new IceShutdownHook(communicator));
+        ObjectAdapter adapter = communicator
+                .createObjectAdapterWithEndpoints("LonntecRPC", "default -h 0.0.0.0 -p 9090");
+        adapter.add(serviceCenter, Util.stringToIdentity("serviceCenter"));
+        adapter.activate();
+
+        logger.info("ice running");
         communicator.waitForShutdown();
     }
 

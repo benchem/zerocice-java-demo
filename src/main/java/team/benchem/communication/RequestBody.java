@@ -18,6 +18,10 @@ public class RequestBody {
     @JSONField(name="message")
     JSONObject messageBody;
 
+    private RequestBody(){
+
+    }
+
     public RequestBody(String handlerName, JSONObject messageBody) {
         this.handlerName = handlerName;
         this.messageBody = messageBody;

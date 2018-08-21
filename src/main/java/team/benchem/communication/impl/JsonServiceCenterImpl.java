@@ -2,10 +2,12 @@ package team.benchem.communication.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.zeroc.Ice.Current;
+import com.zeroc.Ice.Identity;
 import org.springframework.stereotype.Service;
 import team.benchem.communication.JsonServiceCenter;
 import team.benchem.communication.JsonServicePortalPrx;
 import team.benchem.communication.ResponseBody;
+import team.benchem.communication._JsonServiceCenterPrxI;
 import team.benchem.lang.SystemStateCode;
 
 import java.util.Calendar;
@@ -23,21 +25,23 @@ import java.util.Map;
 @Service
 public class JsonServiceCenterImpl implements JsonServiceCenter {
 
-    final static int TIMEOUT_SECOND = 30;
+    final static int TIMEOUT_SECOND = 300;
     final static Map<String, Date> clientExpiresTime = new HashMap<>();
     final static Map<String, JsonServicePortalPrx> clientProxies = new HashMap<>();
 
     @Override
-    public void register(String clientTag, JsonServicePortalPrx callBack, Current current) {
+    public void register(String clientTag, Identity identity, Current current) {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.SECOND, TIMEOUT_SECOND);
         Date expiresTime = calendar.getTime();
         clientExpiresTime.put(clientTag, expiresTime);
-        clientProxies.put(clientTag, callBack);
+        JsonServicePortalPrx dymCallback = JsonServicePortalPrx.checkedCast(current.con.createProxy(identity));
+        clientProxies.put(clientTag, dymCallback);
+        System.out.println(clientTag);
     }
 
     @Override
-    public void unRegister(String clientTag, Current current) {
+    public void unRegister(String clientTag, Identity identity, Current current) {
         if(clientProxies.containsKey(clientTag)){
             clientProxies.remove(clientTag);
         }
